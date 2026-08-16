@@ -1,0 +1,8 @@
+# The rule engine, enumerator, offline analysis and reports use only the
+# Python standard library. The extras below unlock optional features:
+
+# --ssh  (enumerate a remote target over SSH)
+paramiko>=3.4.0
+
+# --reason  (optional Claude AI reasoning layer; also needs an API key)
+anthropic>=0.69.0

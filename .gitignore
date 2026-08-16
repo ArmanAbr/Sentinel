@@ -1,0 +1,6 @@
+.venv/
+__pycache__/
+*.pyc
+*.html
+loot.json
+!labs/sample_findings.json

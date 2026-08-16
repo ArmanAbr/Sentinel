@@ -1,0 +1,21 @@
+{
+  "meta": {
+    "target": "lab-victim (10.10.10.50)",
+    "note": "Synthetic enumeration output for offline demo/testing. Not a real host."
+  },
+  "findings": [
+    {"category": "user", "value": "bob", "key": "id", "detail": "uid=1000(bob) gid=1000(bob) groups=1000(bob),999(docker)", "raw": "uid=1000(bob) gid=1000(bob) groups=1000(bob),999(docker)"},
+    {"category": "os", "value": "5.4.0-42-generic", "key": "kernel", "detail": "", "raw": "Linux lab-victim 5.4.0-42-generic #46-Ubuntu SMP x86_64 GNU/Linux"},
+    {"category": "os", "value": "Ubuntu 20.04.1 LTS", "key": "distro", "detail": "", "raw": "PRETTY_NAME=\"Ubuntu 20.04.1 LTS\""},
+    {"category": "sudo", "value": "(root) NOPASSWD: /usr/bin/find", "key": "rule", "detail": "NOPASSWD", "raw": "    (root) NOPASSWD: /usr/bin/find"},
+    {"category": "suid", "value": "/usr/bin/find", "key": "", "detail": "", "raw": "/usr/bin/find"},
+    {"category": "suid", "value": "/usr/bin/vim.basic", "key": "", "detail": "", "raw": "/usr/bin/vim.basic"},
+    {"category": "suid", "value": "/usr/bin/passwd", "key": "", "detail": "", "raw": "/usr/bin/passwd"},
+    {"category": "suid", "value": "/opt/backup/custombackup", "key": "", "detail": "", "raw": "/opt/backup/custombackup"},
+    {"category": "cap", "value": "/usr/bin/python3.8", "key": "capability", "detail": "/usr/bin/python3.8 cap_setuid=ep", "raw": "/usr/bin/python3.8 cap_setuid=ep"},
+    {"category": "writable", "value": "/etc/passwd", "key": "etc_passwd", "detail": "writable by us", "raw": "/etc/passwd"},
+    {"category": "group", "value": "docker", "key": "", "detail": "", "raw": "bob docker"},
+    {"category": "nfs", "value": "/home *(rw,sync,no_root_squash)", "key": "no_root_squash", "detail": "no_root_squash export", "raw": "/home *(rw,sync,no_root_squash)"},
+    {"category": "env", "value": "env_keep+=LD_PRELOAD", "key": "ld_preload", "detail": "env_keep dangerous", "raw": "Defaults env_keep += LD_PRELOAD"}
+  ]
+}
