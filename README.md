@@ -18,7 +18,7 @@ along the way.
 - Safety-first: read-only by default, execution guarded behind explicit authorization
   flags, graceful degradation with no API key, and 18 offline tests.
 
----
+--- 
 
 ## Two tools in one
 
