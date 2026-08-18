@@ -44,6 +44,16 @@ class TestParsers(unittest.TestCase):
         out = en.parse_nfs(text)
         self.assertEqual([f.value.split()[0] for f in out], ["/b"])
 
+    def test_parse_path_flags_relative_and_writable(self):
+        # "." and empty (CWD), any relative entry, and /tmp|/home are unsafe;
+        # normal absolute dirs are not.
+        out = en.parse_path("/usr/bin:bin:.::/tmp/x:/home/bob/.local/bin:/sbin")
+        flagged = [f.value for f in out]
+        self.assertEqual(flagged, ["bin", ".", ".", "/tmp/x", "/home/bob/.local/bin"])
+
+    def test_parse_path_clean_path_has_no_findings(self):
+        self.assertEqual(en.parse_path("/usr/local/bin:/usr/bin:/bin:/sbin"), [])
+
 
 class TestKnowledge(unittest.TestCase):
     def test_suid_payload_formats(self):
