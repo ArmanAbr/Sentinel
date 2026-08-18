@@ -66,6 +66,21 @@ class TestKnowledge(unittest.TestCase):
         self.assertTrue(kb._ver_less("3.13.0-24-generic", (4, 8, 3)))
         self.assertFalse(kb._ver_less("5.4.0", (4, 8, 3)))
 
+    def test_dirtypipe_vulnerable_versions(self):
+        # In range and below the series fix -> vulnerable.
+        for v in ("5.8.0", "5.10.0-40-generic", "5.15.24", "5.16.10", "5.12.5"):
+            self.assertTrue(kb._dirtypipe_vulnerable(v), v)
+
+    def test_dirtypipe_patched_versions(self):
+        # Backport fixes and anything at/above them in-series -> patched.
+        for v in ("5.16.11", "5.15.25", "5.15.30", "5.10.102", "5.10.150"):
+            self.assertFalse(kb._dirtypipe_vulnerable(v), v)
+
+    def test_dirtypipe_out_of_range(self):
+        # Introduced in 5.8; gone by 5.17.
+        self.assertFalse(kb._dirtypipe_vulnerable("5.4.0-42-generic"))
+        self.assertFalse(kb._dirtypipe_vulnerable("5.17.0"))
+
     def test_basename(self):
         self.assertEqual(kb.basename("/usr/bin/vim.basic"), "vim.basic")
 

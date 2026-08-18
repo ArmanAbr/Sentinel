@@ -143,8 +143,9 @@ KERNEL_HINTS = [
     {
         "name": "DirtyPipe",
         "cve": "CVE-2022-0847",
-        "match": lambda v: _ver_between(v, (5, 8, 0), (5, 16, 11)),
-        "note": "Linux 5.8 – 5.16.11: arbitrary write to read-only files via pipe splicing.",
+        "match": lambda v: _dirtypipe_vulnerable(v),
+        "note": "Linux 5.8+ (fixed in 5.16.11 / 5.15.25 / 5.10.102): arbitrary "
+                "write to read-only files via pipe splicing.",
         "ref": "https://dirtypipe.cm4all.com/",
     },
     {
@@ -182,6 +183,27 @@ def _ver_less(v: str, hi: tuple[int, int, int]) -> bool:
 
 def _ver_between(v: str, lo: tuple[int, int, int], hi: tuple[int, int, int]) -> bool:
     return lo <= _parse_kernel(v) <= hi
+
+
+# DirtyPipe (CVE-2022-0847) was introduced in 5.8 and fixed in the stable
+# backports 5.16.11, 5.15.25 and 5.10.102. A point release at or above its
+# series' fix is patched, so a single 5.8–5.16.11 range wrongly flags kernels
+# like 5.15.30 or 5.10.150 as vulnerable.
+_DIRTYPIPE_FIXED: dict[tuple[int, int], tuple[int, int, int]] = {
+    (5, 16): (5, 16, 11),
+    (5, 15): (5, 15, 25),
+    (5, 10): (5, 10, 102),
+}
+
+
+def _dirtypipe_vulnerable(v: str) -> bool:
+    ver = _parse_kernel(v)
+    if ver < (5, 8, 0) or ver > (5, 16, 11):
+        return False
+    fixed = _DIRTYPIPE_FIXED.get(ver[:2])
+    if fixed is not None:
+        return ver < fixed
+    return True
 
 
 def basename(path: str) -> str:
