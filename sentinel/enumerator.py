@@ -162,7 +162,11 @@ def parse_path(text: str) -> list[Finding]:
     out = []
     for elem in text.strip().split(":"):
         e = elem.strip()
-        if e in (".", "") or e.startswith("/tmp") or e.startswith("/home"):
+        # An empty element or any non-absolute entry (".", "bin", "./x") is
+        # resolved relative to the CWD — the classic writable-PATH hijack vector.
+        # Absolute dirs under world-writable trees (/tmp, /home) are unsafe too.
+        relative = e == "" or not e.startswith("/")
+        if relative or e.startswith("/tmp") or e.startswith("/home"):
             out.append(Finding("path", e or ".", key="unsafe_path",
                                detail="writable/relative PATH element", raw=text.strip()))
     return out
